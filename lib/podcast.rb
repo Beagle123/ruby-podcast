@@ -11,10 +11,8 @@ module Podcast
 
   class Feed
 
-    attr_reader :title, :link, :description, :image, :base, :language, :version, :about
-    attr_writer :title, :link, :description, :image, :base, :language, :version, :about
-
-    include Enumerable
+    # same as attr_reader and attr_writer together
+    attr_accessor :title, :link, :description, :image, :base, :language, :version, :about
 
     def initialize
       @podcast_files = []
@@ -99,18 +97,20 @@ module Podcast
       return content
     end
 
-    def each
-      @songs.each do |s|
-        yield s
-      end
-    end
+#  I don't think this is needed.  Its not used, and you can just
+#  use obj.songs.each instead, and eliminate a few lines of code.
+#
+#    def each
+#      @songs.each do |s|
+#        yield s
+#      end
+#    end
 
   end
 
   class PodcastFile
 
-    attr_reader :artist, :album, :title, :file, :path, :length, :type, :mtime
-    attr_writer :artist, :album, :title, :file, :path, :length, :type, :mtime
+    attr_accessor :artist, :album, :title, :file, :path, :length, :type, :mtime
 
     def initialize(file_path)
 
