@@ -17,28 +17,23 @@
 # Copyright (c) 2004 Ed Summers.
 # Licensed under the same terms as Ruby.
 
+
 require 'optparse'
 require 'rubygems'
-require 'podcast'
+require_relative './../lib/podcast.rb' 
 
-def usage(opts)
+
+def halt(opts)
   puts 'podcast --dir my/mp3/dir --out podcast.rss --title "Title" --description "Description" --link http://mypodcastserver/'
   puts "Version: #{Podcast::NAME}"
   puts opts.help
   exit
 end
 
-# the location to look for mp3s
-dir = ''
-
-# the location to write the podcast file
-podcast_file = nil 
-
-# the podcast parameters set by the user
-version = nil
-
 # create podcast object
 podcast = Podcast::Feed.new()
+
+dir = podcast_file = version = nil
 
 # read options
 opts = OptionParser.new
@@ -51,27 +46,35 @@ opts.on("-a", "--about VAL", String)        { |val| podcast.about=val }
 opts.on("-i", "--image VAL", String)        { |val| podcast.image=val }
 opts.on("-v", "--version VAL", String)        { |val| version=val }
 opts.on("-e", "--description VAL", String)        { |val| podcast.description=val }
+
 begin
   opts.parse(ARGV)
 rescue => e
-  usage(opts)
+  halt(opts)
 end
 
-if dir == nil || !File.directory?(dir) || !podcast.valid?
-  usage(opts)
-end
+# the location to look for mp3s (always valid)
+dir = File.directory?(dir.to_s) ? dir : Dir.pwd
+dir = File.expand_path(dir)  
 
+# the location to write the podcast file (always valid)
+podcast_file ||= "podcast.rss"
+
+# the podcast parameters set by the user
+version ||= "2.0"
+
+# unless everything works... (don't need to test dir, always valid)
+halt(opts) unless podcast.valid?
 
 # add a directory
 podcast.add_dir(dir)
-podcast.version = version ? version : "0.9"
 
 # write off the rss
-if podcast_file  
-  file = File.new(podcast_file, 'w')
-  file.write(podcast.get_rss())
-  file.close
-else 
-  puts "Outputting podcast"
-  puts podcast.get_rss()
-end
+puts "Total FIles:  #{podcast.podcast_files.size.to_s}"
+puts "Outputting podcast to:  #{podcast_file}"
+puts "Used RSS version #{version}"
+file = File.new(podcast_file, 'w')
+file.write(podcast.get_rss(version)) # if version is nil defaults to "1.0"
+file.close
+puts "Done!  #{podcast.about}"
+

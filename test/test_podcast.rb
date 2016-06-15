@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift('lib')
+#$LOAD_PATH.unshift('lib')
 require 'test/unit'
 require 'rubygems'
 require 'podcast'
@@ -43,8 +43,8 @@ class PodcastTest < Test::Unit::TestCase
     p.base = 'http://www.example.org/torrents'
     ## add using directory so we can confirm it is stripped
     p.add_dir('test') 
-    p.version = "0.9"
-    xml = p.get_rss().to_s
+#    p.version = "0.9"
+    xml = p.get_rss("0.9").to_s
 
     # parse the rss
     parser = RSS::Parser.new('0.9')

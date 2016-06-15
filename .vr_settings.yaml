@@ -1,14 +1,20 @@
 --- !ruby/object:VR_ENV
-width: 1105
+vr_yaml_file: ".vr_settings.yaml"
+width: 1286
 height: 600
 panel_pos: 360
-run_command_line: ruby main.rb
+notebook_panel_position: 398
+run_command_line: "./go"
 open_files:
 - "/home/eric/vrp/podcast/Untitled"
 open_folders:
 - "/home/eric/vrp/podcast"
+- "/home/eric/vrp/podcast/bin"
+- "/home/eric/vrp/podcast/lib"
+- "/home/eric/vrp/podcast/lib/podcast"
+- "/home/eric/vrp/podcast/test"
 current_file: "/home/eric/vrp/podcast/Untitled"
-rdoc_command_line: rdoc -x README
-vr_yaml_file: ".vr_settings.yaml"
-notebook_panel_position: 400
 current_line: 1
+rdoc_command_line: rdoc -x README
+builder: !ruby/object:Gtk::Builder {}
+top_level_window: false
